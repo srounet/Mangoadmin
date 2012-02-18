@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block body %}
+<ul class="breadcrumb">
+  <li>
+    <a href="/">Home</a> <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="/servers">Servers</a> <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="/servers/view/{{ server_oid }}">{{ server_oid }}</a> <span class="divider">/</span>
+  </li>
+  <li class="active">
+    <a href="#">{{ stats.ns }}</a>
+  </li>
+</ul>
+
+<h1>Collection: {{ collection_name }}</h1>
+
+<div class="well">
+  <ul>
+    <li>Datbase name: <strong>{{ database_name }}</strong></li>
+    <li>Document count: <strong>{{ stats.count }}</strong></li>
+    <li>Storage size: <strong>{{ stats.storageSize / 1024578 }} mo</strong></li>
+    <li>Last extent size: <strong>{{ stats.lastExtentSize / 1024758 }} mo</strong></li>
+    <li>Avg object size: <strong>{{ stats.avgObjSize / 1024758 }} mo</strong></li>
+    <li>Size: <strong>{{ stats.size / 1024758 }} mo</strong></li>
+    <li>Flags: <strong>{{ stats.flags }}</strong></li>
+    <li>Total extents: <strong>{{ stats.numExtents }}</strong></li>
+    <li>Total index size: <strong>{{ stats.totalIndexSize / 1024758 }} mo</strong></li>
+  </ul>
+</div>
+
+<h1>Indexes ({{ stats.nindexes }})</h1>
+
+<table class="table table-striped table-bordered table-condensed">
+  <thead>
+    <tr>
+      <th class="span3">Name</th>
+      <th>Ns</th>
+      <th>Key</th>
+      <th class="span2">Size</th>
+      <th class="span2">Unique</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for index in indexes %}
+    <tr>
+      <th>{{ index }}</th>
+      <th>{{ stats.ns }}</th>
+      <th>{{ indexes[index].key }}</th>
+      <td>{{ stats.indexSizes[index] / 1024758 }} mo</td>
+      <th>{{ indexes[index].unique }}</th>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h1>Documents ({{ stats.count }})</h1>
+{% for document in documents %}
+<div class="well">
+  {% for key in document %}
+  <p><strong>{{ key }}</strong>: {{ document[key] }}</p>
+  {% endfor %}
+</div>
+{% endfor %}
+
+{% endblock %}
