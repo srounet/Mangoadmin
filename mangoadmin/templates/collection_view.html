@@ -41,20 +41,32 @@
       <th>Key</th>
       <th class="span2">Size</th>
       <th class="span2">Unique</th>
+      <th class="span1">Action</th>
     </tr>
   </thead>
   <tbody>
     {% for index in indexes %}
     <tr>
-      <th>{{ index }}</th>
-      <th>{{ stats.ns }}</th>
-      <th>{{ indexes[index].key }}</th>
+      <td>{{ index }}</td>
+      <td>{{ stats.ns }}</td>
+      <td>{{ indexes[index].key }}</td>
       <td>{{ stats.indexSizes[index] / 1024758 }} mo</td>
-      <th>{{ indexes[index].unique }}</th>
+      <td>{{ indexes[index].unique }}</td>
+      <td>
+	<a href="/collection/view/{{ server_oid }}/{{ database_name }}/{{ collection_name }}/drop_index/{{ index }}">
+	  <img src="" class="icon-remove" />
+	</a>
+      </td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
+
+<div class="well">
+  <a href="/collection/view/{{ server_oid}}/{{ database_name }}/{{ collection_name }}/reindex" class="btn btn-primary">Reindex</a>
+  <a href="/collection/view/{{ server_oid}}/{{ database_name }}/{{ collection_name }}/drop_indexes" class="btn btn-danger">Drop Indexes</a>
+  <a href="/collection/view/{{ server_oid}}/{{ database_name }}/{{ collection_name }}/drop" class="btn btn-danger">Drop collection</a>
+</div>
 
 <h1>Documents ({{ stats.count }})</h1>
 {% for document in documents %}

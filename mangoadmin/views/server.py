@@ -17,10 +17,10 @@ def index():
 def add():
     f = request.form
     if not f.get('address'):
-        flash('Missing mongo server "Address".')
+        flash('Missing mongo server "Address".', 'error')
         return redirect('/servers')
     if not f.get('name'):
-        flash('Missing mongo server "Name".')
+        flash('Missing mongo server "Name".', 'error')
         return redirect('/servers')
     name = f.get('name')
     address = f.get('address')
@@ -43,7 +43,7 @@ def remove(server_oid):
     g.db['mangoadmin']['servers'].remove({
         '_id': ObjectId(server_oid)
     })
-    flash('Server %s deleted' % server_oid)
+    flash('Server %s deleted' % server_oid, 'success')
     return redirect('/servers')
 
 
@@ -53,7 +53,7 @@ def view(server_oid):
         '_id': ObjectId(server_oid)
     })
     if not server:
-        flash('Server %s not found' % server_oid)
+        flash('Server %s not found' % server_oid, 'error')
         return redirect('/servers')
     connection = Connection(host=server['address'], port=int(server['port']))
     server_info = connection.server_info()
@@ -72,3 +72,16 @@ def view(server_oid):
         server_info=server_info,
         databases=databases
    )
+
+@server.route('/drop/<path:server_oid>/<path:database_name>')
+def drop_databae(server_oid, database_name):
+    server = g.db['mangoadmin']['servers'].find_one({
+        '_id': ObjectId(server_oid)
+    })
+    if not server:
+        flash('Server %s not found' % server_oid, 'error')
+        return redirect('/servers')
+    connection = Connection(host=server['address'], port=int(server['port']))
+    connection.drop_database(database_name)
+    flash('%s dropped.' % database_name, 'success')
+    return redirect('/servers/view/%s' % server_oid)
