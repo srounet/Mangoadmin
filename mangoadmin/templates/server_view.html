@@ -45,7 +45,9 @@
   <tbody>
     {% for collection in databases[database] %}
     <tr>
-      <th>{{database}}.{{ collection }}</th>
+      <th>
+	<a href="/collection/view/{{ server._id }}/{{ database }}/{{ collection }}">{{database}}.{{ collection }}</a>
+      </th>
       <td>{{ databases[database][collection].count }}</td>
       <td>
 	<strong>{{ databases[database][collection].index_count }}</strong>

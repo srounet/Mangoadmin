@@ -32,7 +32,9 @@
   <tbody>
     {% for server in servers %}
     <tr>
-      <td>{{ server.name }}</td>
+      <td>
+	<a href="view/{{ server._id }}">{{ server.name }}</a>
+      </td>
       <td>{{ server.username or 'None' }}</td>
       <td>{{ server.address }}</td>
       <td>
